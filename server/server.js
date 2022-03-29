@@ -60,7 +60,7 @@ app.all("*", function(req, res, next) {
 });
 
 app.post("*", (req, res, next) => {
-  log(`콘텐츠 요청:${JSON.stringify(req.path, 2)}`);
+  log(timestamp()+`콘텐츠 요청:${JSON.stringify(req.path, 2)}`);
   next();
 });
 
@@ -78,7 +78,7 @@ router.post("/getTempData", (req, res, next) => {
 router.post("/reset", (req, res, next) => {
   luckyData = {};
   errorData = [];
-  log(`데이터 재설정 성공`);
+  log(timestamp()+`데이터 재설정 성공`);
   saveErrorDataFile(errorData);
   return saveDataFile(luckyData).then(data => {
     res.json({
@@ -90,13 +90,13 @@ router.post("/reset", (req, res, next) => {
 // 모든 사용자 가져오기
 router.post("/getUsers", (req, res, next) => {
   res.json(curData.users);
-  log(`복권 사용자 데이터 LOAD.`);
+  log(timestamp()+`복권 사용자 데이터 LOAD.`);
 });
 
 // 경품 정보 얻기
 router.post("/getPrizes", (req, res, next) => {
   // res.json(curData.prize);
-  log(`상품 데이터 반환 성공`);
+  log(timestamp()+`상품 데이터 반환 성공`);
 });
 
 // 경품 데이터 저장
@@ -107,13 +107,13 @@ router.post("/saveData", (req, res, next) => {
       res.json({
         type: "설정변경완료"
       });
-      log(`경품 데이터 저장 성공`);
+      log(timestamp()+`경품 데이터 저장 성공`);
     })
     .catch(data => {
       res.json({
         type: "설정변경실패！"
       });
-      log(`상품 데이터 저장실패`);
+      log(timestamp()+`상품 데이터 저장실패`);
     });
 });
 
@@ -131,7 +131,7 @@ router.post("/errorData", (req, res, next) => {
       res.json({
         type: "설정 실패！"
       });
-      log(`누락된 인사 데이터를 저장하지 못했습니다.`);
+      log(timestamp()+`누락된 인사 데이터를 저장하지 못했습니다.`);
     });
 });
 
@@ -151,14 +151,14 @@ router.post("/export", (req, res, next) => {
         type: "success",
         url: "추첨결과.xlsx"
       });
-      log(`데이터 내보내기 성공!`);
+      log(timestamp()+`데이터 내보내기 성공!`);
     })
     .catch(err => {
       res.json({
         type: "error",
         error: err.error
       });
-      log(`데이터 내보내기 실패!`);
+      log(timestamp()+`데이터 내보내기 실패!`);
     });
 });
 
@@ -182,7 +182,7 @@ router.all("*", (req, res) => {
 
 function log(text) {
   global.console.log(text);
-  global.console.log("-----------------------------------------------");
+  global.console.log(timestamp()+"-----------------------------------------------");
 }
 
 function setLucky(type, data) {
@@ -204,7 +204,7 @@ function setErrorData(data) {
 app.use(router);
 
 function loadData() {
-  console.log("엑셀 데이터 파일 불러오기");
+  console.log(timestamp()+"엑셀 데이터 파일 불러오기");
   let cfgData = {};
 
   // curData.users = loadXML(path.join(cwd, "data/users.xlsx"));
@@ -245,6 +245,12 @@ function getLeftUsers() {
 }
 
 loadData();
+
+function timestamp(){ 
+  var today = new Date(); 
+  today.setHours(today.getHours() + 9); 
+  return today.toISOString().replace('T', ' ').substring(0, 19); 
+}
 
 module.exports = {
   run: function(devPort, noOpen) {

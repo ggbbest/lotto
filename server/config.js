@@ -51,7 +51,7 @@ const prizes = [
     type: 5,
     count: 8,
     text: "4th",
-    title: "DJI 드론",
+    title: "드론",
     img: "../img/spark.jpg"
   },
   {
@@ -65,7 +65,7 @@ const prizes = [
     type: 7,
     count: 11,
     text: "6th",
-    title: "에디파이어 블루투스 헤드셋",
+    title: "블루투스 헤드셋",
     img: "../img/edifier.jpg"
   }
 ];
