@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-// 测试抽奖结果数据的正确性
+// 测试추첨결과数据的正确性
 var selected = {},
   repeat = [],
   luckyData = require("/Users/xiechang/Documents/project/抽奖/product/dist/temp.json"),

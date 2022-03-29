@@ -8,7 +8,7 @@ if (!fs.existsSync(cwd)) {
 }
 
 /**
- * 读取缓存的数据内容
+ * 캐시된 데이터 콘텐츠 읽기
  */
 function loadTempData() {
   let pros = [];
@@ -40,7 +40,7 @@ function loadTempData() {
 }
 
 /**
- * 读取XML文件数据
+ * XML 파일 데이터 읽기
  */
 function loadXML(xmlPath) {
   let userData = xlsx.parse(xmlPath);
@@ -55,14 +55,14 @@ function loadXML(xmlPath) {
 }
 
 /**
- * 写入excel
+ * 엑셀에 쓰기
  * @param {Array} data
  * @param {string} name
  */
 function writeXML(data, name) {
   let buffer = xlsx.build([
     {
-      name: "抽奖结果",
+      name: "추첨결과",
       data: data
     }
   ]);
@@ -79,7 +79,7 @@ function writeXML(data, name) {
 }
 
 /**
- * 写入文件
+ * 파일에 쓰기
  * @param {*} data
  */
 function saveDataFile(data) {
@@ -96,13 +96,13 @@ function saveDataFile(data) {
         return;
       }
       resolve();
-      console.log("数据写入成功");
+      console.log("save data");
     });
   });
 }
 
 /**
- * 错误日志文件输出
+ * 오류 로그 파일 출력
  * @param {*} data
  */
 function saveErrorDataFile(data) {
@@ -118,13 +118,13 @@ function saveErrorDataFile(data) {
         return;
       }
       resolve();
-      console.log("数据写入成功");
+      console.log("save data");
     });
   });
 }
 
 /**
- * 洗牌算法
+ * 셔플 알고리즘
  * @param {*} arr
  */
 function shuffle(arr) {

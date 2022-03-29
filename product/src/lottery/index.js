@@ -72,7 +72,7 @@ function initAll() {
 
       TOTAL_CARDS = ROW_COUNT * COLUMN_COUNT;
 
-      // 读取当前已设置的抽奖结果
+      // 读取当前已设置的추첨결과
       basicData.leftUsers = data.leftUsers;
       basicData.luckyUsers = data.luckyData;
 
@@ -276,7 +276,7 @@ function bindEvent() {
           lottery();
         });
         break;
-      // 导出抽奖结果
+      // 导出추첨결과
       case "save":
         saveData().then(res => {
           resetCard().then(res => {
@@ -626,7 +626,7 @@ function lottery() {
 }
 
 /**
- * 保存上一次的抽奖结果
+ * 保存上一次的추첨결과
  */
 function saveData() {
   if (!currentPrize) {

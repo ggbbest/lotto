@@ -25,7 +25,7 @@ let app = express(),
   defaultType = cfg.prizes[0]["type"],
   defaultPage = `default data`;
 
-//这里指定参数使用 json 格式
+//여기에 지정된 매개변수는 json 형식을 사용합니다.
 app.use(
   bodyParser.json({
     limit: "1mb"
@@ -44,12 +44,12 @@ if (process.argv.length > 2) {
 
 app.use(express.static(cwd));
 
-//请求地址为空，默认重定向到index.html文件
+//요청 주소가 비어 있습니다. 기본적으로 index.html 파일로 리디렉션됩니다.
 app.get("/", (req, res) => {
   res.redirect(301, "index.html");
 });
 
-//设置跨域访问
+//교차 도메인 액세스 설정
 app.all("*", function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -60,11 +60,11 @@ app.all("*", function(req, res, next) {
 });
 
 app.post("*", (req, res, next) => {
-  log(`请求内容：${JSON.stringify(req.path, 2)}`);
+  log(`콘텐츠 요청:${JSON.stringify(req.path, 2)}`);
   next();
 });
 
-// 获取之前设置的数据
+// 이전에 설정한 데이터 가져오기
 router.post("/getTempData", (req, res, next) => {
   getLeftUsers();
   res.json({
@@ -74,11 +74,11 @@ router.post("/getTempData", (req, res, next) => {
   });
 });
 
-// 获取所有用户
+// 모든 사용자 가져오기
 router.post("/reset", (req, res, next) => {
   luckyData = {};
   errorData = [];
-  log(`重置数据成功`);
+  log(`데이터 재설정 성공`);
   saveErrorDataFile(errorData);
   return saveDataFile(luckyData).then(data => {
     res.json({
@@ -87,83 +87,83 @@ router.post("/reset", (req, res, next) => {
   });
 });
 
-// 获取所有用户
+// 모든 사용자 가져오기
 router.post("/getUsers", (req, res, next) => {
   res.json(curData.users);
-  log(`成功返回抽奖用户数据`);
+  log(`복권 사용자 데이터 LOAD.`);
 });
 
-// 获取奖品信息
+// 경품 정보 얻기
 router.post("/getPrizes", (req, res, next) => {
   // res.json(curData.prize);
-  log(`成功返回奖品数据`);
+  log(`상품 데이터 반환 성공`);
 });
 
-// 保存抽奖数据
+// 경품 데이터 저장
 router.post("/saveData", (req, res, next) => {
   let data = req.body;
   setLucky(data.type, data.data)
     .then(t => {
       res.json({
-        type: "设置成功！"
+        type: "설정변경완료"
       });
-      log(`保存奖品数据成功`);
+      log(`경품 데이터 저장 성공`);
     })
     .catch(data => {
       res.json({
-        type: "设置失败！"
+        type: "설정변경실패！"
       });
-      log(`保存奖品数据失败`);
+      log(`상품 데이터 저장실패`);
     });
 });
 
-// 保存抽奖数据
+// 경품 데이터 저장
 router.post("/errorData", (req, res, next) => {
   let data = req.body;
   setErrorData(data.data)
     .then(t => {
       res.json({
-        type: "设置成功！"
+        type: "설정변경완료！"
       });
-      log(`保存没来人员数据成功`);
+      log(`누락된 인사 데이터를 성공적으로 저장`);
     })
     .catch(data => {
       res.json({
-        type: "设置失败！"
+        type: "설정 실패！"
       });
-      log(`保存没来人员数据失败`);
+      log(`누락된 인사 데이터를 저장하지 못했습니다.`);
     });
 });
 
-// 保存数据到excel中去
+// 엑셀에 데이터 저장
 router.post("/export", (req, res, next) => {
   let type = [1, 2, 3, 4, 5, defaultType],
-    outData = [["工号", "姓名", "部门"]];
+    outData = [["번호", "이름", "부서"]];
   cfg.prizes.forEach(item => {
     outData.push([item.text]);
     outData = outData.concat(luckyData[item.type] || []);
   });
 
-  writeXML(outData, "/抽奖结果.xlsx")
+  writeXML(outData, "/추첨결과.xlsx")
     .then(dt => {
-      // res.download('/抽奖结果.xlsx');
+      // res.download('/추첨결과.xlsx');
       res.status(200).json({
         type: "success",
-        url: "抽奖结果.xlsx"
+        url: "추첨결과.xlsx"
       });
-      log(`导出数据成功！`);
+      log(`데이터 내보내기 성공!`);
     })
     .catch(err => {
       res.json({
         type: "error",
         error: err.error
       });
-      log(`导出数据失败！`);
+      log(`데이터 내보내기 실패!`);
     });
 });
 
-//对于匹配不到的路径或者请求，返回默认页面
-//区分不同的请求返回不同的页面内容
+//일치하지 않는 경로 또는 요청의 경우 기본 페이지로 돌아갑니다.
+// 다른 요청을 구별하고 다른 페이지 콘텐츠를 반환합니다.
 router.all("*", (req, res) => {
   if (req.method.toLowerCase() === "get") {
     if (/\.(html|htm)/.test(req.originalUrl)) {
@@ -204,15 +204,15 @@ function setErrorData(data) {
 app.use(router);
 
 function loadData() {
-  console.log("加载EXCEL数据文件");
+  console.log("엑셀 데이터 파일 불러오기");
   let cfgData = {};
 
   // curData.users = loadXML(path.join(cwd, "data/users.xlsx"));
   curData.users = loadXML(path.join(dataBath, "data/users.xlsx"));
-  // 重新洗牌
+  // 재편성
   shuffle(curData.users);
 
-  // 读取已经抽取的结果
+  // 추출된 결과 읽기
   loadTempData()
     .then(data => {
       luckyData = data[0];
@@ -224,7 +224,7 @@ function loadData() {
 }
 
 function getLeftUsers() {
-  //  记录当前已抽取的用户
+  //  현재 추출된 사용자 기록
   let lotteredUser = {};
   for (let key in luckyData) {
     let luckys = luckyData[key];
@@ -232,7 +232,7 @@ function getLeftUsers() {
       lotteredUser[item[0]] = true;
     });
   }
-  // 记录当前已抽取但是不在线人员
+  // 현재 추출되었지만 온라인 상태가 아닌 기록
   errorData.forEach(item => {
     lotteredUser[item[0]] = true;
   });
