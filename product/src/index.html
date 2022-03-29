@@ -15,6 +15,32 @@
     <script src="./lib/TrackballControls.js"></script>
     <script src="./lib/CSS3DRenderer.js"></script>
     <script src="./lib/ajax.js"></script>
+    <!-- ######################### -->
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+    <script>
+      if (typeof web3 !== 'undefined') {
+      // Mist/MetaMask의 프로바이더 사용
+      web3 = new Web3(web3.currentProvider);
+      // alert('web3가 주입되었습니다.');
+    } else {
+      // 사용자가 Metamask를 설치하지 않은 경우에 대해 처리 // 사용자들에게 Metamask를 설치하라는 등의 메세지를 보여줄 것
+      web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.c4ei.net"));
+    }
+    let userAccount;    // 사용자가 사용 중 이라고 브라우저가 인식하는 계정
+    let checkAccountChange = setInterval(async function() {
+      // 계정이 바뀌었는지 확인
+      let currentAccount = await web3.eth.getAccounts().then(function(array) { return array[0] });
+      // 현재 유저가 들고있는 계정(currentAccount)가 브라우저가 인식하는 계정(userAccount)와 다르다면
+      if (currentAccount !== userAccount) {
+        // 계정을 업데이트 해준다
+        userAccount = currentAccount;
+        // 새 계정에 대한 UI로 업데이트하기 위한 함수 호출 및 메시지 알림
+        //alert('Your account is ' + userAccount);
+      }
+      document.getElementById('ly_userAccount').innerText = userAccount;
+    }, 5000);     // 5초 마다 계정 확인
+    </script>
+    <!-- ######################### -->
 
     <div class="canvas-box">
       <canvas id="canvas">브라우저가 canvas 를 지원하지 않습니다</canvas>
@@ -30,15 +56,17 @@
     <div id="container"></div>
 
     <div id="menu">
+
+      <!-- <button class="enableEthereumButton">Enable Metamask</button> -->
       <button id="enter">로또참여</button>
       <div id="lotteryBar" class="none">
         <button id="lottery">로또추첨</button>
         <button id="reLottery">다시도전</button>
         <button id="save">결과저장</button>
         <button id="reset" class="margin-l-40">초기화</button>
+        <h4 style="color: bisque;">Account: <span class="showAccount" id="ly_userAccount" ></span></h4>
       </div>
     </div>
-
     <div class="qipao-container"></div>
   </body>
 </html>

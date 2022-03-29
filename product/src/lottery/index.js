@@ -768,7 +768,7 @@ function reset() {
   window.AJAX({
     url: "/reset",
     success(data) {
-      console.log("重置成功");
+      console.log("성공적으로 재설정");
     }
   });
 }
