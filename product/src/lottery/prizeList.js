@@ -158,7 +158,7 @@ function showPrizeList(currentPrizeIndex) {
   if (currentPrize.type === defaultType) {
     currentPrize.count === "무제한";
   }
-  let htmlCode = `<div class="prize-mess">적출<label id="prizeType" class="prize-shine">${currentPrize.text}</label><label id="prizeText" class="prize-shine">${currentPrize.title}</label>,남은<label id="prizeLeft" class="prize-shine">${currentPrize.count}</label>개인</div><ul class="prize-list">`;
+  let htmlCode = `<div class="prize-mess">추첨<label id="prizeType" class="prize-shine">${currentPrize.text}</label><label id="prizeText" class="prize-shine">${currentPrize.title}</label>,남은<label id="prizeLeft" class="prize-shine">${currentPrize.count}</label>개인</div><ul class="prize-list">`;
   prizes.forEach(item => {
     if (item.type === defaultType) {
       return true;

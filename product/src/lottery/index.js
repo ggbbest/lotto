@@ -258,7 +258,7 @@ function bindEvent() {
           // 즉석로또
           lottery();
         });
-        addQipao(`적출[${currentPrize.title}],조정`);
+        addQipao(`추첨[${currentPrize.title}],조정`);
         break;
       // 다시하기
       case "reLottery":
