@@ -40,29 +40,29 @@ let camera,
 let selectedCardIndex = [],
   rotate = false,
   basicData = {
-    prizes: [], //奖品信息
-    users: [], //所有人员
-    luckyUsers: {}, //已中奖人员
-    leftUsers: [] //未中奖人员
+    prizes: [], //상품 정보
+    users: [], //모든 직원
+    luckyUsers: {}, //승자
+    leftUsers: [] //당첨되지 않은 분들
   },
   interval,
-  // 当前抽的奖项，从最低奖开始抽，直到抽到大奖
+  // 현재 추첨된 상품은 가장 낮은 상품부터 큰 상품이 추첨될 때까지
   currentPrizeIndex,
   currentPrize,
-  // 正在抽奖
+  // 추첨
   isLotting = false,
   currentLuckys = [];
 
 initAll();
 
 /**
- * 初始化所有DOM
+ * 모든 DOM 초기화
  */
 function initAll() {
   window.AJAX({
     url: "/getTempData",
     success(data) {
-      // 获取基础数据
+      // 기본 데이터 가져오기
       prizes = data.cfgData.prizes;
       EACH_COUNT = data.cfgData.EACH_COUNT;
       COMPANY = data.cfgData.COMPANY;
@@ -72,7 +72,7 @@ function initAll() {
 
       TOTAL_CARDS = ROW_COUNT * COLUMN_COUNT;
 
-      // 读取当前已设置的추첨결과
+      // 추첨결과 설정 읽기
       basicData.leftUsers = data.leftUsers;
       basicData.luckyUsers = data.luckyData;
 
@@ -199,44 +199,44 @@ function setLotteryStatus(status = false) {
 }
 
 /**
- * 事件绑定
+ * 이벤트 바인딩
  */
 function bindEvent() {
   document.querySelector("#menu").addEventListener("click", function (e) {
     e.stopPropagation();
-    // 如果正在抽奖，则禁止一切操作
+    // 추첨이 진행 중인 경우 모든 작업이 금지됩니다.
     if (isLotting) {
-      addQipao("抽慢一点点～～");
+      addQipao("천천히...");
       return false;
     }
 
     let target = e.target.id;
     switch (target) {
-      // 显示数字墙
+      // 디스플레이 디지털 벽
       case "welcome":
         switchScreen("enter");
         rotate = false;
         break;
-      // 进入抽奖
+      // 복권에 들어가다
       case "enter":
         removeHighlight();
-        addQipao(`马上抽取[${currentPrize.title}],不要走开。`);
+        addQipao(`[${currentPrize.title}],추첨중 나가지마세요.`);
         // rotate = !rotate;
         rotate = true;
         switchScreen("lottery");
         break;
-      // 重置
+      // 초기화
       case "reset":
         let doREset = window.confirm(
-          "是否确认重置数据，重置后，当前已抽的奖项全部清空？"
+          "데이터를 초기화하시겠습니까? 초기화 후 추첨된 경품은 모두 삭제됩니다."
         );
         if (!doREset) {
           return;
         }
-        addQipao("重置所有数据，重新抽奖");
+        addQipao("모든 데이터 재설정, 다시 그리기");
         addHighlight();
         resetCard();
-        // 重置所有数据
+        // 모든 데이터 재설정
         currentLuckys = [];
         basicData.leftUsers = Object.assign([], basicData.users);
         basicData.luckyUsers = {};
@@ -247,32 +247,32 @@ function bindEvent() {
         reset();
         switchScreen("enter");
         break;
-      // 抽奖
+      // 즉석로또
       case "lottery":
         setLotteryStatus(true);
-        // 每次抽奖前先保存上一次的抽奖数据
+        // 각 복권 전에 이전 복권 데이터를 저장
         saveData();
-        //更新剩余抽奖数目的数据显示
+        //남은 추첨 횟수의 데이터 표시 업데이트
         changePrize();
         resetCard().then(res => {
-          // 抽奖
+          // 즉석로또
           lottery();
         });
-        addQipao(`正在抽取[${currentPrize.title}],调整好姿势`);
+        addQipao(`적출[${currentPrize.title}],조정`);
         break;
-      // 重新抽奖
+      // 다시하기
       case "reLottery":
         if (currentLuckys.length === 0) {
-          addQipao(`当前还没有抽奖，无法重新抽取喔~~`);
+          addQipao(`아직 복권이 없어서 다시는 못뽑아요~~`);
           return;
         }
         setErrorData(currentLuckys);
-        addQipao(`重新抽取[${currentPrize.title}],做好准备`);
+        addQipao(`다시하기[${currentPrize.title}],준비`);
         setLotteryStatus(true);
-        // 重新抽奖则直接进行抽取，不对上一次的抽奖数据进行保存
-        // 抽奖
+        // 재추첨의 경우 바로 추첨되며, 마지막 복권의 데이터는 저장되지 않습니다.
+        // 즉석로또
         resetCard().then(res => {
-          // 抽奖
+          // 즉석로또
           lottery();
         });
         break;
@@ -284,7 +284,7 @@ function bindEvent() {
             currentLuckys = [];
           });
           exportData();
-          addQipao(`数据已保存到EXCEL中。`);
+          addQipao(`데이터가 EXCEL에 저장되었습니다.`);
         });
         break;
     }
@@ -309,7 +309,7 @@ function switchScreen(type) {
 }
 
 /**
- * 创建元素
+ * 요소 생성
  */
 function createElement(css, text) {
   let dom = document.createElement("div");
@@ -319,7 +319,7 @@ function createElement(css, text) {
 }
 
 /**
- * 创建名牌
+ * 브랜드 만들기
  */
 function createCard(user, isBold, id, showTable) {
   var element = createElement();
@@ -335,7 +335,7 @@ function createCard(user, isBold, id, showTable) {
     element.style.backgroundColor =
       "rgba(0,127,127," + (Math.random() * 0.7 + 0.25) + ")";
   }
-  //添加公司标识
+  //회사 로고 추가
   element.appendChild(createElement("company", COMPANY));
 
   element.appendChild(createElement("name", user[1]));
@@ -357,7 +357,7 @@ function addHighlight() {
 }
 
 /**
- * 渲染地球等
+ * 지구 등을 렌더링합니다.
  */
 function transform(targets, duration) {
   // TWEEN.removeAll();
@@ -432,14 +432,14 @@ function onWindowResize() {
 }
 
 function animate() {
-  // 让场景通过x轴或者y轴旋转
+  // x축 또는 y축을 통해 장면 회전
   // rotate && (scene.rotation.y += 0.088);
 
   requestAnimationFrame(animate);
   TWEEN.update();
   controls.update();
 
-  // 渲染循环
+  // 렌더 루프
   // render();
 }
 
@@ -453,7 +453,7 @@ function selectCard(duration = 600) {
     tag = -(currentLuckys.length - 1) / 2,
     locates = [];
 
-  // 计算位置信息, 大于5个分两排显示
+  // 위치정보 계산, 5개 이상은 2행으로 표시
   if (currentLuckys.length > 5) {
     let yPosition = [-87, 87],
       l = selectedCardIndex.length,
@@ -487,7 +487,7 @@ function selectCard(duration = 600) {
 
   let text = currentLuckys.map(item => item[1]);
   addQipao(
-    `恭喜${text.join("、")}获得${currentPrize.title}, 新的一年必定旺旺旺。`
+    `축하합니다${text.join("、")}가져 오기${currentPrize.title}, 새해는 풍족해야 합니다.`
   );
 
   selectedCardIndex.forEach((cardIndex, index) => {
@@ -526,13 +526,13 @@ function selectCard(duration = 600) {
     .onUpdate(render)
     .start()
     .onComplete(() => {
-      // 动画结束后可以操作
+      // 애니메이션 종료 후 조작 가능
       setLotteryStatus();
     });
 }
 
 /**
- * 重置抽奖牌内容
+ * 추첨 카드 콘텐츠 재설정
  */
 function resetCard(duration = 500) {
   if (currentLuckys.length === 0) {
@@ -584,21 +584,21 @@ function resetCard(duration = 500) {
 }
 
 /**
- * 抽奖
+ * 즉석로또
  */
 function lottery() {
   rotateBall().then(() => {
-    // 将之前的记录置空
+    // 이전 레코드를 비우다
     currentLuckys = [];
     selectedCardIndex = [];
-    // 当前同时抽取的数目,当前奖品抽完还可以继续抽，但是不记录数据
+    // 현재 동시 추첨 횟수입니다. 현재 경품이 추첨된 후, 계속해서 추첨할 수 있지만 데이터가 기록되지 않습니다.
     let perCount = EACH_COUNT[currentPrizeIndex],
       luckyData = basicData.luckyUsers[currentPrize.type],
       leftCount = basicData.leftUsers.length,
       leftPrizeCount = currentPrize.count - (luckyData ? luckyData.length : 0);
 
     if (leftCount === 0) {
-      addQipao("人员已抽完，现在重新设置所有人员可以进行二次抽奖！");
+      addQipao("인원이 뽑혔고 이제 모든 인원을 두 번째 추첨을 위해 재설정할 수 있습니다!");
       basicData.leftUsers = basicData.users;
       leftCount = basicData.leftUsers.length;
     }
@@ -630,7 +630,7 @@ function lottery() {
  */
 function saveData() {
   if (!currentPrize) {
-    //若奖品抽完，则不再记录数据，但是还是可以进行抽奖
+    //경품이 추첨되면 데이터는 더 이상 기록되지 않지만 추첨은 계속 수행할 수 있습니다.
     return;
   }
 
@@ -650,7 +650,7 @@ function saveData() {
   }
 
   if (currentLuckys.length > 0) {
-    // todo by xc 添加数据保存机制，以免服务器挂掉数据丢失
+    // todo by xc 서버가 끊기거나 데이터가 손실되는 것을 방지하는 데이터 저장 메커니즘 추가
     return setData(type, currentLuckys);
   }
   return Promise.resolve();
@@ -659,20 +659,20 @@ function saveData() {
 function changePrize() {
   let luckys = basicData.luckyUsers[currentPrize.type];
   let luckyCount = (luckys ? luckys.length : 0) + EACH_COUNT[currentPrizeIndex];
-  // 修改左侧prize的数目和百分比
+  // 왼쪽의 상금 수와 비율 수정
   setPrizeData(currentPrizeIndex, luckyCount);
 }
 
 /**
- * 随机抽奖
+ * 무작위 추첨
  */
 function random(num) {
-  // Math.floor取到0-num-1之间数字的概率是相等的
+  // Math.floor가 0-num-1 사이의 숫자를 취할 확률은 동일합니다.
   return Math.floor(Math.random() * num);
 }
 
 /**
- * 切换名牌人员信息
+ * Toggle 브랜드 인사 정보
  */
 function changeCard(cardIndex, user) {
   let card = threeDCards[cardIndex].element;
@@ -683,7 +683,7 @@ function changeCard(cardIndex, user) {
 }
 
 /**
- * 切换名牌背景
+ * 명판의 배경 변경
  */
 function shine(cardIndex, color) {
   let card = threeDCards[cardIndex].element;
@@ -692,7 +692,7 @@ function shine(cardIndex, color) {
 }
 
 /**
- * 随机切换背景和人员信息
+ * 배경 및 인사 정보를 무작위로 전환
  */
 function shineCard() {
   let maxCard = 10,
@@ -700,7 +700,7 @@ function shineCard() {
   let shineCard = 10 + random(maxCard);
 
   setInterval(() => {
-    // 正在抽奖停止闪烁
+    // 복권 추첨 정지 깜박임
     if (isLotting) {
       return;
     }
@@ -708,7 +708,7 @@ function shineCard() {
     for (let i = 0; i < shineCard; i++) {
       let index = random(maxUser),
         cardIndex = random(TOTAL_CARDS);
-      // 当前显示的已抽中名单不进行随机切换
+      // 현재 표시된 당첨 목록은 무작위로 전환되지 않습니다.
       if (selectedCardIndex.includes(cardIndex)) {
         continue;
       }
@@ -825,7 +825,7 @@ window.onload = function () {
             animate();
           },
           () => {
-            addQipao("背景音乐自动播放失败，请手动播放！");
+            addQipao("배경 음악이 자동으로 재생되지 않습니다. 수동으로 재생하십시오!");
           }
         );
       } else {

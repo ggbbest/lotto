@@ -5,17 +5,17 @@ let defaultType = 0;
 
 let prizes;
 const DEFAULT_MESS = [
-  "我是该抽中一等奖还是一等奖呢，纠结ing...",
-  "听说要提前一个月吃素才能中大奖喔！",
-  "好想要一等奖啊！！！",
-  "一等奖有没有人想要呢？",
-  "五等奖也不错，只要自己能中奖就行",
-  "祝大家新年快乐！",
-  "中不中奖不重要，大家吃好喝好。",
-  "新年，祝福大家事事顺遂。",
-  "作为专业陪跑的我，我就看看你们有谁跟我一样",
-  "新的一年祝福大家越来越好！",
-  "来年再战！！！"
+  "1등을 할까, 1등을 할까, 뒤엉켜...",
+  "잭팟을 얻으려면 한 달 전에 채식주의자가 되어야 한다고 들었습니다!",
+  "나는 정말로 일등을 원한다! ! !",
+  "1등을 원하는 사람이 있습니까?",
+  "5등은 상을 받을 수만 있다면 나쁘지 않다",
+  "새해 복 많이 받으세요!",
+  "복권에 당첨되든 안 되든 상관없이 다들 잘 먹고 잘 마십니다.",
+  "새해 복 많이 받으십시오. 모든 일에 최선을 다하시기 바랍니다.",
+  "전문가가 동행하여 나와 같은 사람이 있는지 확인하겠습니다.",
+  "새해에도 좋은 일만 가득하시길 바랍니다!",
+  "내년에도 파이팅! ! !"
 ];
 
 let lastDanMuList = [];
@@ -156,9 +156,9 @@ function setPrizes(pri) {
 function showPrizeList(currentPrizeIndex) {
   let currentPrize = prizes[currentPrizeIndex];
   if (currentPrize.type === defaultType) {
-    currentPrize.count === "不限制";
+    currentPrize.count === "무제한";
   }
-  let htmlCode = `<div class="prize-mess">正在抽取<label id="prizeType" class="prize-shine">${currentPrize.text}</label><label id="prizeText" class="prize-shine">${currentPrize.title}</label>，剩余<label id="prizeLeft" class="prize-shine">${currentPrize.count}</label>个</div><ul class="prize-list">`;
+  let htmlCode = `<div class="prize-mess">적출<label id="prizeType" class="prize-shine">${currentPrize.text}</label><label id="prizeText" class="prize-shine">${currentPrize.title}</label>,남은<label id="prizeLeft" class="prize-shine">${currentPrize.count}</label>개인</div><ul class="prize-list">`;
   prizes.forEach(item => {
     if (item.type === defaultType) {
       return true;
@@ -247,9 +247,9 @@ let setPrizeData = (function () {
     }
 
     if (currentPrizeIndex === 0) {
-      prizeElement.prizeType.textContent = "特别奖";
+      prizeElement.prizeType.textContent = "특별상";
       prizeElement.prizeText.textContent = " ";
-      prizeElement.prizeLeft.textContent = "不限制";
+      prizeElement.prizeLeft.textContent = "무제한";
       return;
     }
 
