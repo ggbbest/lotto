@@ -15,7 +15,7 @@ const BASE_HEIGHT = 1080;
 
 let TOTAL_CARDS,
   btns = {
-    enter: document.querySelector("#enter"),
+    btnEnter: document.querySelector("#btnEnter"),
     lotteryBar: document.querySelector("#lotteryBar")
   },
   prizes,
@@ -188,7 +188,7 @@ function initCards() {
   bindEvent();
 
   if (showTable) {
-    switchScreen("enter");
+    switchScreen("btnEnter");
   } else {
     switchScreen("lottery");
   }
@@ -214,11 +214,11 @@ function bindEvent() {
     switch (target) {
       // 디스플레이 디지털 벽
       case "welcome":
-        switchScreen("enter");
+        switchScreen("btnEnter");
         rotate = false;
         break;
       // 복권에 들어가다
-      case "enter":
+      case "btnEnter":
         removeHighlight();
         addQipao(`[${currentPrize.title}],추첨중 나가지마세요.`);
         // rotate = !rotate;
@@ -245,7 +245,7 @@ function bindEvent() {
 
         resetPrize(currentPrizeIndex);
         reset();
-        switchScreen("enter");
+        switchScreen("btnEnter");
         break;
       // 즉석로또
       case "lottery":
@@ -295,13 +295,13 @@ function bindEvent() {
 
 function switchScreen(type) {
   switch (type) {
-    case "enter":
-      btns.enter.classList.remove("none");
+    case "btnEnter":
+      btns.btnEnter.classList.remove("none");
       btns.lotteryBar.classList.add("none");
       transform(targets.table, 2000);
       break;
     default:
-      btns.enter.classList.add("none");
+      btns.btnEnter.classList.add("none");
       btns.lotteryBar.classList.remove("none");
       transform(targets.sphere, 2000);
       break;

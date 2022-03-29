@@ -38,7 +38,22 @@
         //alert('Your account is ' + userAccount);
       }
       document.getElementById('ly_userAccount').innerText = userAccount;
+      if(userAccount.length>12){
+        jsfn_btnShowHide('visible');
+      }else{
+        jsfn_btnShowHide('hidden');
+      }
     }, 5000);     // 5초 마다 계정 확인
+    function jsfn_btnShowHide(str){
+      let _btn = document.getElementById('btnEnter');
+      let _msg = document.getElementById('ly_dispmsg');
+      _btn.style.visibility = str;
+      if(str == 'visible'){
+        _msg.style.visibility = 'hidden';
+      }else{
+        _msg.style.visibility = 'visible';
+      }
+    }
     </script>
     <!-- ######################### -->
 
@@ -58,7 +73,8 @@
     <div id="menu">
 
       <!-- <button class="enableEthereumButton">Enable Metamask</button> -->
-      <button id="enter">로또참여</button>
+      <h4 id="ly_dispmsg" style="color: bisque;">메타마스크 연동 후 게임이 가능 합니다.</h4>
+      <button id="btnEnter" style="visibility: hidden;">로또참여</button>
       <div id="lotteryBar" class="none">
         <button id="lottery">로또추첨</button>
         <button id="reLottery">다시도전</button>
