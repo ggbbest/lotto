@@ -487,7 +487,7 @@ function selectCard(duration = 600) {
 
   let text = currentLuckys.map(item => item[1]);
   addQipao(
-    `축하합니다${text.join("、")}가져 오기${currentPrize.title}, 새해는 풍족해야 합니다.`
+    `축하합니다${text.join("、")}가져 오기${currentPrize.title}, 대박나세요.`
   );
 
   selectedCardIndex.forEach((cardIndex, index) => {
